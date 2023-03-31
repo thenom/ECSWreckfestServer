@@ -1,0 +1,13 @@
+FROM cm2network/steamcmd
+
+USER root
+
+RUN apt-get update -y && apt-get install -y wine && dpkg --add-architecture i386 && apt-get update && apt-get install -y wine32 && mkdir -p /steam/wreckfest && chown steam:steam /steam/wreckfest
+
+USER steam
+
+RUN ./steamcmd.sh +force_install_dir /steam/wreckfest +login anonymous +@sSteamCmdForcePlatformType windows +app_update 361580  +quit
+
+WORKDIR /steam/wreckfest
+ADD start*.sh /steam/wreckfest
+CMD ["./start-wreckfest.sh"]
