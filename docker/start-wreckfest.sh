@@ -1,4 +1,5 @@
 #!/bin/bash
+# make executable!
 
 [[ -z $SERVER_NAME ]] && SERVER_NAME="Wreckfest server"
 [[ -z $WELCOME_MESSAGE ]] && WELCOME_MESSAGE="Wreck them all"

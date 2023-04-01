@@ -11,6 +11,17 @@ variable "server_password" {
   type        = string
 }
 
+variable "server_name" {
+  description = "The name for the running server"
+  type        = string
+}
+
+variable "welcome_message" {
+  description = "The welcome message for the server"
+  type        = string
+  default     = "Start your engines!"
+}
+
 variable "udp_ports" {
   description = "List of UDP ports to setup for the service"
   type        = set(string)
@@ -44,4 +55,9 @@ variable "lb_name" {
 variable "source_cidr_blocks" {
   description = "The CIDR block sources to add to the allowed ingress"
   type        = set(string)
+}
+
+variable "subnet_ids" {
+  description = "The list of subnet ID's to deploy to"
+  type        = list(string)
 }
