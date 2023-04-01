@@ -4,7 +4,10 @@ resource "aws_ecs_task_definition" "task_def" {
   network_mode             = "awsvpc"
   cpu                      = 1024
   memory                   = 2048
-  container_definitions    = <<TASK_DEFINITION
+
+  execution_role_arn = aws_iam_role.task.arn
+
+  container_definitions = <<TASK_DEFINITION
 [
   {
     "name": "server",
@@ -20,7 +23,7 @@ resource "aws_ecs_task_definition" "task_def" {
         "name": "WELCOME_MESSAGE", "value": "Howdy!"
       },
       {
-        "name": "GAME_PASSWORD", "value": "flibble"
+        "name": "GAME_PASSWORD", "value": "${var.server_password}"
       },
       {
         "name": "ADMIN_STEAM_IDS", "value": "${join(",", var.admin_steam_ids)}"

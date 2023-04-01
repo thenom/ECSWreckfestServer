@@ -5,3 +5,43 @@ variable "admin_steam_ids" {
     "76561198012904643" # Me
   ]
 }
+
+variable "server_password" {
+  description = "The server password to be asked on terraform apply"
+  type        = string
+}
+
+variable "udp_ports" {
+  description = "List of UDP ports to setup for the service"
+  type        = set(string)
+  default = [
+    "27016",
+    "33540"
+  ]
+}
+
+variable "tcp_ports" {
+  description = "List of TCP ports to setup for the service"
+  type        = set(string)
+  default = [
+  ]
+}
+
+variable "tcp_udp_ports" {
+  description = "List of TCP/UDP ports to setup for the service"
+  type        = set(string)
+  default = [
+    "27015"
+  ]
+}
+
+variable "lb_name" {
+  description = "The name opf the load balancer to setup the TG and Listener for the above ports"
+  type        = string
+  default     = "main-2a"
+}
+
+variable "source_cidr_blocks" {
+  description = "The CIDR block sources to add to the allowed ingress"
+  type        = set(string)
+}
