@@ -36,7 +36,13 @@ resource "aws_ecs_task_definition" "task_def" {
     ],
     "portMappings": [
 ${join(", ", local.port_mappings)}
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${aws_cloudwatch_log_group.logs.name}",
+      }
+    }
   }
 ]
 TASK_DEFINITION
@@ -85,4 +91,10 @@ resource "aws_ecs_service" "service" {
       container_port   = load_balancer.key
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "logs" {
+  name = "WreckfestLogs"
+
+  retention_in_days = 1
 }
