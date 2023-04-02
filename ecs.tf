@@ -1,6 +1,9 @@
 locals {
-  distinct_ports_list = distinct(concat(tolist(var.tcp_ports), tolist(var.udp_ports), tolist(var.tcp_udp_ports)))
-  port_mappings       = [for port in local.distinct_ports_list : "{ \"containerPort\": ${port} }"]
+  tcp_port_mappings     = [for port in var.tcp_ports : "{ \"containerPort\": ${port}, \"hostPort\": ${port}, \"protocol\": \"tcp\" }"]
+  udp_port_mappings     = [for port in var.udp_ports : "{ \"containerPort\": ${port}, \"hostPort\": ${port}, \"protocol\": \"udp\" }"]
+  tcp_udp_port_mappings = [for port in var.tcp_udp_ports : "{ \"containerPort\": ${port}, \"hostPort\": ${port}, \"protocol\": \"tcp\" }"]
+
+  port_mappings = concat(local.tcp_port_mappings, local.udp_port_mappings, local.tcp_udp_port_mappings)
 }
 
 resource "aws_ecs_task_definition" "task_def" {
@@ -32,6 +35,9 @@ resource "aws_ecs_task_definition" "task_def" {
       },
       {
         "name": "ADMIN_STEAM_IDS", "value": "${join(",", var.admin_steam_ids)}"
+      },
+      {
+        "name": "TERM", "value": "linux"
       }
     ],
     "portMappings": [
@@ -41,6 +47,8 @@ ${join(", ", local.port_mappings)}
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "${aws_cloudwatch_log_group.logs.name}",
+        "awslogs-region": "eu-west-2",
+        "awslogs-stream-prefix": "server"
       }
     }
   }
