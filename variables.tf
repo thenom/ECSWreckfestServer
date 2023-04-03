@@ -20,6 +20,12 @@ variable "welcome_message" {
   default     = "Start your engines!"
 }
 
+variable "deploy_lb_setup" {
+  description = "Deploy required listeners and target groups for the service.  If False then it will attempt to assign a public IP to the ECS Service so will need to be in a public subnet"
+  type        = bool
+  default     = false
+}
+
 variable "udp_ports" {
   description = "List of UDP ports to setup for the service"
   type        = set(string)

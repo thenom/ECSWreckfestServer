@@ -1,10 +1,10 @@
 data "aws_subnet" "lb_subnets" {
-  for_each = toset(data.aws_lb.lb.subnets)
+  for_each = var.deploy_lb_setup ? toset(data.aws_lb.lb[0].subnets) : toset([])
   id       = each.value
 }
 
 locals {
-  source_cidrs = setunion([for s in data.aws_subnet.lb_subnets : s.cidr_block], var.source_cidr_blocks)
+  source_cidrs = var.deploy_lb_setup ? setunion([for s in data.aws_subnet.lb_subnets : s.cidr_block], var.source_cidr_blocks) : var.source_cidr_blocks
 }
 
 resource "aws_security_group" "container" {

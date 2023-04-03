@@ -71,12 +71,13 @@ resource "aws_ecs_service" "service" {
   }
 
   network_configuration {
-    subnets         = var.subnet_ids
-    security_groups = [aws_security_group.container.id]
+    subnets          = var.subnet_ids
+    security_groups  = [aws_security_group.container.id]
+    assign_public_ip = !var.deploy_lb_setup
   }
 
   dynamic "load_balancer" {
-    for_each = var.tcp_ports
+    for_each = var.deploy_lb_setup ? var.tcp_ports : toset([])
     content {
       target_group_arn = aws_lb_target_group.tcp_container[load_balancer.key].arn
       container_name   = "server"
@@ -85,7 +86,7 @@ resource "aws_ecs_service" "service" {
   }
 
   dynamic "load_balancer" {
-    for_each = var.udp_ports
+    for_each = var.deploy_lb_setup ? var.udp_ports : toset([])
     content {
       target_group_arn = aws_lb_target_group.udp_container[load_balancer.key].arn
       container_name   = "server"
@@ -94,7 +95,7 @@ resource "aws_ecs_service" "service" {
   }
 
   dynamic "load_balancer" {
-    for_each = var.tcp_udp_ports
+    for_each = var.deploy_lb_setup ? var.tcp_udp_ports : toset([])
     content {
       target_group_arn = aws_lb_target_group.tcp_udp_container[load_balancer.key].arn
       container_name   = "server"
