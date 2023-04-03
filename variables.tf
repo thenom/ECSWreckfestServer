@@ -57,5 +57,5 @@ variable "source_cidr_blocks" {
 
 variable "subnet_ids" {
   description = "The list of subnet ID's to deploy to"
-  type        = list(string)
+  type        = set(string)
 }

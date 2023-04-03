@@ -3,7 +3,7 @@ data "aws_lb" "lb" {
 }
 
 resource "aws_lb_target_group" "tcp_container" {
-  for_each    = var.tcp_ports
+  for_each    = toset(var.tcp_ports)
   name        = "wreckfest-tcp-${each.key}"
   port        = each.key
   protocol    = "TCP"
@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "tcp_container" {
 }
 
 resource "aws_lb_listener" "tcp" {
-  for_each = var.tcp_ports
+  for_each = toset(var.tcp_ports)
 
   load_balancer_arn = data.aws_lb.lb.arn
   port              = each.key
@@ -25,7 +25,7 @@ resource "aws_lb_listener" "tcp" {
 }
 
 resource "aws_lb_target_group" "udp_container" {
-  for_each    = var.udp_ports
+  for_each    = toset(var.udp_ports)
   name        = "wreckfest-udp-${each.key}"
   port        = each.key
   protocol    = "UDP"
@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "udp_container" {
 }
 
 resource "aws_lb_listener" "udp" {
-  for_each = var.udp_ports
+  for_each = toset(var.udp_ports)
 
   load_balancer_arn = data.aws_lb.lb.arn
   port              = each.key
@@ -47,7 +47,7 @@ resource "aws_lb_listener" "udp" {
 }
 
 resource "aws_lb_target_group" "tcp_udp_container" {
-  for_each    = var.tcp_udp_ports
+  for_each    = toset(var.tcp_udp_ports)
   name        = "wreckfest-tcp-udp-${each.key}"
   port        = each.key
   protocol    = "TCP_UDP"
@@ -56,7 +56,7 @@ resource "aws_lb_target_group" "tcp_udp_container" {
 }
 
 resource "aws_lb_listener" "tcp_udp" {
-  for_each = var.tcp_udp_ports
+  for_each = toset(var.tcp_udp_ports)
 
   load_balancer_arn = data.aws_lb.lb.arn
   port              = each.key
