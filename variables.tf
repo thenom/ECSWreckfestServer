@@ -56,11 +56,6 @@ variable "lb_name" {
   default     = "main-2a"
 }
 
-variable "source_cidr_blocks" {
-  description = "The CIDR block sources to add to the allowed ingress"
-  type        = set(string)
-}
-
 variable "subnet_ids" {
   description = "The list of subnet ID's to deploy to"
   type        = set(string)

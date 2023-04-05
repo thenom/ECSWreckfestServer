@@ -4,7 +4,7 @@ data "aws_subnet" "lb_subnets" {
 }
 
 locals {
-  source_cidrs = var.deploy_lb_setup ? setunion([for s in data.aws_subnet.lb_subnets : s.cidr_block], var.source_cidr_blocks) : var.source_cidr_blocks
+  source_cidrs = var.deploy_lb_setup ? toset([for s in data.aws_subnet.lb_subnets : s.cidr_block]) : toset(["0.0.0.0/0"])
 }
 
 resource "aws_security_group" "container" {
